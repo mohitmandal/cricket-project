@@ -8,7 +8,7 @@ ui <- navbarPage(
     ),
     tabPanel("Analysis",
              h3("Data processing"),
-             p(plotOutput("kohli_ODI_plot"))
+             p(plotOutput("kohli_ODIruns_plot"))
     ),
     tabPanel("Model", 
              h3("Projections of Future Performance"),
@@ -21,19 +21,14 @@ ui <- navbarPage(
              Harvard  University. 
              You can reach me at mandal@g.harvard.edu."),
              h3("Data sources"),
-             p(tags$a(href="https://www.un.org/development/desa/pd/content/international-migrant-stock", "International Migrant Stock 2020"), ": disaggregated by age, sex, destination and origin country"),
-             p(tags$a(href="https://github.com/mohitmandal/finalproject", "Link"), "to repo")))
+             p(tags$a(href="https://stats.espncricinfo.com/ci/engine/stats/index.html", "ESPNCricinfo Statsguru")),
+             p(tags$a(href="https://github.com/mohitmandal/cricket-project", "Link"), "to repo")))
 
 server <- function(input, output) {
     output$kohli_ODI_plot <- renderImage({
-        list(src = 'kohli_ODI_plot.png',
+        list(src = 'kohli_ODIruns_plot.png',
              width = 700,
              height = 600)
-    }, deleteFile = FALSE)
-    output$plot_income <- renderImage({
-        list(src = 'plot_income.png',
-             width = 500,
-             height = 500)
     }, deleteFile = FALSE)
 }
 

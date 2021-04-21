@@ -5,9 +5,7 @@ kohli_ODI <- getPlayerDataOD(profile = 253802,
                              file = "kohli_ODI.csv",
                              type = "batting")
 
-kohli_T20 <- getPlayerDataTT(profile = 253802, 
-                             dir = "app/raw_data",
-                             file = "kohli_T20.csv",
-                             type="batting")
-
-
+sharma_ODI <- getPlayerDataOD(profile = 34102, 
+                              dir = "app/raw_data",
+                              file = "sharma_ODI.csv",
+                              type = "batting")
