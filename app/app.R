@@ -1,17 +1,31 @@
 library(shiny)
+library(shinydashboard)
+source("plots.R")
 
 ui <- navbarPage(
     "The Future of Cricket",
     tabPanel("Background",
-             h5("How have top cricketers maintained their performance since their debut?"),
-             p("For this analysis, I look at the performances of Virat Kohli, Babar Azam, and Rohit Sharma."),
+             h5("How have top cricketers performed in T20i since their debut?"),
+             p("For this analysis, I look at the performances of Virat Kohli, and Rohit Sharmsa.")
     ),
     tabPanel("Analysis",
-             h3("Data processing"),
-             p(plotOutput("kohli_ODIruns_plot"))
-    ),
+             h3("Statistics about batsman"),
+             selectInput("batsman",
+                         "Select a batsman",
+                         c("Virat Kohli", "Rohit Sharma")
+             ),
+             tabBox(
+                 title = NULL, width = 12,
+                 
+                 # The id lets us use input$tabset1 on the server to find the current tab
+                 
+                 id = "tabset1", height = "250px",
+                 tabPanel("Runs", plotOutput("runs_plot"),
+                          p("Test")),
+                 tabPanel("Strike Rate", plotOutput("SR_plot"))
+             )),
     tabPanel("Model", 
-             h3("Projections of Future Performance"),
+             h3("Projections of Future Performance")
     ),
     tabPanel("About", 
              h3("Project interests"),
@@ -25,13 +39,21 @@ ui <- navbarPage(
              p(tags$a(href="https://github.com/mohitmandal/cricket-project", "Link"), "to repo")))
 
 server <- function(input, output) {
-    output$kohli_ODI_plot <- renderImage({
-        list(src = 'kohli_ODIruns_plot.png',
-             width = 700,
-             height = 600)
-    }, deleteFile = FALSE)
+    output$runs_plot <- renderPlot(
+        if (input$batsman == "Virat Kohli") {
+            kohli_runs_plot
+        } else {
+            sharma_runs_plot
+        }
+    )
+    output$SR_plot <- renderPlot(
+            if (input$batsman == "Virat Kohli") {
+                kohli_SR_plot
+            } else {
+                sharma_SR_plot
+            }    
+            )
 }
-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
