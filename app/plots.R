@@ -4,7 +4,8 @@ library(ggthemes)
 library(ggdist)
 
 # The library "cricketr" is extremely useful. It makes it easy to scrape data
-# on individual players and teams from the website ESPNCricinfo.
+# on individual players and teams from the website ESPNCricinfo. Credits to
+# Tinniam V. Ganesh!
 
 kohli <- getPlayerDataTT(profile = 253802, 
                          dir = "raw_data",
@@ -28,7 +29,8 @@ klrahul <- getPlayerDataTT(profile = 422108,
                            type = "batting")
 
 # I want to create a plot to orient the reader to the different formats of cricket
-# on the home page. For that, I need to scrape team data.
+# on the home page. For that, I will need to scrape team data. T20, ODI and Test
+# refers to the three different formats of cricket.
 
 india_T20 <- getTeamData(teamName = "India",
                      dir = "raw_data",
@@ -45,12 +47,20 @@ india_test <- getTeamData(teamName = "India",
                      file = "India_test.csv",
                      matchType = "Test")
 
-# Let's create a plot with the number of games played by India in each format
-# since 2006.
+# I will start by creating a plot with the number of games played by India in
+# each format since 2006. The tibble I just scraped includes information about
+# the day each game is played, so it should be easy to wrangle the nunber of
+# games played per year.
+
+# The as.Date() function ensures that the date column is, in fact, a date. The
+# '%b' is R's way of referring to the abbreviations for month (such as Dec, Jan,
+# etc). I simply want to extract the year for each game.
 
 india_T20$`Start Date` <- as.Date(india_T20$`Start Date`, format = "%d %b %Y")
 
 india_T20$year <- as.numeric(format(india_T20$`Start Date`, "%Y"))
+
+# I can now calculate the number of games played per year.
 
 T20s_played <- india_T20 %>% 
   select(year) %>%
@@ -58,7 +68,7 @@ T20s_played <- india_T20 %>%
   summarise(T20s = n())
 
 
-# Same technique for ODIs
+# We can use the same technique for ODIs. The code is exactly the same.
 
 india_ODI$`Start Date` <- as.Date(india_ODI$`Start Date`, format = "%d %b %Y")
 
@@ -82,13 +92,16 @@ tests_played <- india_test %>%
   group_by(year) %>% 
   summarise(Tests = n())
 
-# Now creating a plot with these results
+# Now, I can create a plot with these results.
 
 games_played <- full_join(T20s_played, ODIs_played, by = "year") %>%
                 full_join(tests_played, by = "year") %>%
   pivot_longer(names_to = "format",
                values_to = "number",
                cols = T20s:Tests)
+
+# To have the bars show up next to each other for easy comparison, "dodge" is a
+# useful command.
 
 plot_games <- ggplot(data = games_played,
        aes(x = year, y = number, fill = format)) +
@@ -101,14 +114,14 @@ plot_games <- ggplot(data = games_played,
        caption = "source: ESPNCricinfo")
   
 
-# Now for the next step. 
+# Now for the next step of analysis! 
 # Creating a vector of all the batsmen selected, so I can call upon it in my
 # app.R file
 
 batsman <- c("kohli", "sharma", "dhawan", "klrahul")
 
-
-# My analysis of batsmen begins here. First I need to clean the data a bit.
+# My analysis of batsmen begins here. First I need to clean the data a bit. I 
+# want a column with the number of each individual innings played.
 
 kohli_pdata  <- kohli %>%
   mutate(innings = row_number()) %>%
@@ -145,7 +158,8 @@ kohli_runs_plot <- kohli_pdata %>%
   
 
 # The same template can be used for other players. I will repeat the
-# same method for Rohit Sharma, Shikhar Dhawan, and KL Rahul
+# same method for Rohit Sharma, Shikhar Dhawan, and KL Rahul. The code is exactly
+# the same, making my job easy.
 
 # Rohit Sharma
 
@@ -220,7 +234,7 @@ klrahul_runs_plot <- klrahul_pdata %>%
        caption = "Source: ESPNCricinfo")
 
 # Now calculating the cumulative strike-rate over the course of a batsman's 
-# innings, first replacing any stray hyphens with 0
+# innings, first replacing any stray hyphens that exist in the tibble with 0.
 
 kohli_pdata$SR[kohli_pdata$SR== "-"] <- 0
 
@@ -322,7 +336,7 @@ klrahul_mdata <- klrahul_pdata %>%
   mutate(batsman = "klrahul") %>%
   select(Runs, BF, Pos, batsman)
 
-# Now we can bring the data together
+# Now we can bring the data together into one easy-to-read tibble.
 
 all_batsmen <- full_join(kohli_mdata, sharma_mdata) %>%
   full_join(dhawan_mdata) %>%
