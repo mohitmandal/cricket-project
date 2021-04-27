@@ -54,7 +54,7 @@ india_test <- getTeamData(teamName = "India",
 
 # The as.Date() function ensures that the date column is, in fact, a date. The
 # '%b' is R's way of referring to the abbreviations for month (such as Dec, Jan,
-# etc). I simply want to extract the year for each game.
+# etc). I want to extract the year for each game.
 
 india_T20$`Start Date` <- as.Date(india_T20$`Start Date`, format = "%d %b %Y")
 
@@ -66,7 +66,6 @@ T20s_played <- india_T20 %>%
   select(year) %>%
   group_by(year) %>% 
   summarise(T20s = n())
-
 
 # We can use the same technique for ODIs. The code is exactly the same.
 

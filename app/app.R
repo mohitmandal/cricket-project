@@ -9,6 +9,9 @@ ui <- navbarPage(
              p("Twenty-20, or T20, is the newest format of cricket, which was officially sanctioned by the International Council of Cricket (ICC) in 2004, with the first international men's T20 taking place between Australia and New Zealand in 2005."),
              p("In a Twenty20 game, two teams have a single innings each, which is restricted to a maximum of 20 overs (or 120 balls). Since its inception, T20 cricket has soared in popularity, as is observable from the chart below, especially with the rise of competitive franchise leagues such as the Indian Premier League. The game is fast-paced and often relies upon batsmen scoring runs at a quick run-rate, as compared to the 50-over (ODI, i.e. One Day International) format."),
              p("In this analysis, I seek to understand the evolution of T20 cricket in the past 15 years through a number of parameters."),
+             
+             # br() is a useful function. It adds white space to the page.
+             
              br(),
              plotOutput("plot_games")
     ),
@@ -18,6 +21,12 @@ ui <- navbarPage(
                          "Select a batsman",
                          c("Virat Kohli", "Rohit Sharma", "Shikhar Dhawan", "KL Rahul")
              ),
+             
+             # tabBox() is a neat way of displaying multiple panels. I do not
+             # need to add each plot separately. Instead, I have included an
+             # if-else chain in the server section below, which displays the
+             # relevant plot depending on the selection by the user.
+             
              tabBox(
                  title = NULL, width = 12,
                  id = "tabset1", height = "250px",
@@ -46,6 +55,11 @@ ui <- navbarPage(
              p("You can find my Github repository", tags$a(href="https://github.com/mohitmandal/cricket-project", "here."))))
 
 server <- function(input, output) {
+    
+    # These code chunks takes the input selection from the user and returns the
+    # relevant plot. It's a tidy way of generating the plots on the cloud
+    # without needing to save them as images beforehand.
+    
     output$runs_plot <- renderPlot(
         if (input$batsman == "Virat Kohli") {
             kohli_runs_plot
