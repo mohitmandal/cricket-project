@@ -158,7 +158,7 @@ kohli_runs_plot <- kohli_pdata %>%
 
 # The same template can be used for other players. I will repeat the
 # same method for Rohit Sharma, Shikhar Dhawan, and KL Rahul. The code is exactly
-# the same, making my job easy.
+# the same, hence why I have not included many comments below.
 
 # Rohit Sharma
 
@@ -317,7 +317,7 @@ klrahul_SR_plot <- klrahul_pdata %>%
 # of opening batsman together.
 
 # First, we need to add a new column making sure we can differentiate 
-# the data from each other, selecting for the relevant variables
+# the batsmen from each other, before selecting for the relevant variables.
 
 kohli_mdata <- kohli_pdata %>%
   mutate(batsman = "kohli") %>%
@@ -391,7 +391,14 @@ plot_1 <- model_data %>%
   pivot_longer(names_to = "batsman",
                values_to = "values",
                cols = `Virat Kohli`:`KL Rahul`) %>%
+  
+  # The fct_reorder() here ensures that the plots are arranged in descending order.
+  
   ggplot(aes(x = values, y = fct_reorder(batsman, values))) +
+  
+  # I like the stat_halfeye function because it portrays the posterior in an
+  # easy-to-read form, with clear distinctions for the 95% confidence interval
+  
   stat_halfeye(aes(fill = stat(cut_cdf_qi(cdf, .width = c(0.95, 1)))),
                show.legend = FALSE) +
   scale_fill_calc() +
@@ -407,6 +414,10 @@ plot_1 <- model_data %>%
 # We can also construct a plot to visualize the best opening combinations
 
 plot_2 <- model_data %>%
+  
+  # Total runs scored by each combination is just the sum of each individual's
+  # predicted runs, taking the same assumptions as before.
+  
   mutate(`Kohli + Sharma` = `kohli_opening` + `sharma_opening`,
          `Kohli + Dhawan` = `kohli_opening` + `dhawan_opening`,
          `Kohli + Sharma` = `kohli_opening` + `klrahul_opening`,
