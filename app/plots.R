@@ -1,5 +1,7 @@
-library (cricketr)
-library (tidyverse)
+library(cricketr)
+library(tidyverse)
+library(ggthemes)
+library(ggdist)
 
 # The library "cricketr" is extremely useful. It makes it easy to scrape data
 # on individual players and teams from the website ESPNCricinfo.
@@ -25,19 +27,88 @@ klrahul <- getPlayerDataTT(profile = 422108,
                            file = "sharma_T20.csv",
                            type = "batting")
 
-india <- getTeamData(teamName = "India",
+# I want to create a plot to orient the reader to the different formats of cricket
+# on the home page. For that, I need to scrape team data.
+
+india_T20 <- getTeamData(teamName = "India",
                      dir = "raw_data",
                      file = "India_T20.csv",
                      matchType = "T20")
 
+india_ODI <- getTeamData(teamName = "India",
+                     dir = "raw_data",
+                     file = "India_ODI.csv",
+                     matchType = "ODI")
 
+india_test <- getTeamData(teamName = "India",
+                     dir = "raw_data",
+                     file = "India_test.csv",
+                     matchType = "Test")
+
+# Let's create a plot with the number of games played by India in each format
+# since 2006.
+
+india_T20$`Start Date` <- as.Date(india_T20$`Start Date`, format = "%d %b %Y")
+
+india_T20$year <- as.numeric(format(india_T20$`Start Date`, "%Y"))
+
+T20s_played <- india_T20 %>% 
+  select(year) %>%
+  group_by(year) %>% 
+  summarise(T20s = n())
+
+
+# Same technique for ODIs
+
+india_ODI$`Start Date` <- as.Date(india_ODI$`Start Date`, format = "%d %b %Y")
+
+india_ODI$year <- as.numeric(format(india_ODI$`Start Date`, "%Y"))
+
+ODIs_played <- india_ODI %>% 
+  select(year) %>%
+  filter(year >= 2006) %>%
+  group_by(year) %>% 
+  summarise(ODIs = n())
+
+# And now for Test matches
+
+india_test$`Start Date` <- as.Date(india_test$`Start Date`, format = "%d %b %Y")
+
+india_test$year <- as.numeric(format(india_test$`Start Date`, "%Y"))
+
+tests_played <- india_test %>% 
+  select(year) %>%
+  filter(year >= 2006) %>%
+  group_by(year) %>% 
+  summarise(Tests = n())
+
+# Now creating a plot with these results
+
+games_played <- full_join(T20s_played, ODIs_played, by = "year") %>%
+                full_join(tests_played, by = "year") %>%
+  pivot_longer(names_to = "format",
+               values_to = "number",
+               cols = T20s:Tests)
+
+plot_games <- ggplot(data = games_played,
+       aes(x = year, y = number, fill = format)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(breaks = seq(2006, 2021, by = 2)) +
+  labs(title = "Games played by India since 2006, by format",
+       subtitle = "ODIs are on the wane, increasingly subsituted with T20s",
+       x = "Year",
+       y = "Games played",
+       caption = "source: ESPNCricinfo")
+  
+
+# Now for the next step. 
 # Creating a vector of all the batsmen selected, so I can call upon it in my
 # app.R file
 
 batsman <- c("kohli", "sharma", "dhawan", "klrahul")
 
 
-# My analysis begins here. First I need to clean the data a bit.
+# My analysis of batsmen begins here. First I need to clean the data a bit.
 
 kohli_pdata  <- kohli %>%
   mutate(innings = row_number()) %>%
@@ -51,7 +122,7 @@ kohli_pdata  <- kohli %>%
   
   mutate(Runs = gsub("\\*", "", Runs))
 
-# Need to convert the Runs, BF (Balls Faced) columns into numeric variables
+# I need to convert the Runs, BF (Balls Faced) columns into numeric variables
 
 kohli_pdata$Runs <- as.numeric(as.character(kohli_pdata$Runs))
 kohli_pdata$BF <- as.numeric(as.character(kohli_pdata$BF))
@@ -215,18 +286,17 @@ klrahul_SR_plot <- klrahul_pdata %>%
        y = "Strike Rate",
        caption = "Source: ESPNCricinfo")
 
-library(rstanarm)
-library(ggdist)
+# library(rstanarm)
 
 # Does it make sense to do a model of each batsman separately? Let me try it out
 # with Virat Kohli's statistics
 
-fit_test <- stan_glm(Runs ~ BF + Pos,
-                     data = kohli_pdata,
-                     refresh = 0,
-                     seed = 71)
+# fit_test <- stan_glm(Runs ~ BF + Pos,
+#                     data = kohli_pdata,
+#                     refresh = 0,
+#                     seed = 71)
 
-print(fit_test, digits = 4)
+# print(fit_test, digits = 4)
 
 # Probably not. The MAD_SD values are really large and there aren't really 
 # enough data points to have a robust posterior. 
@@ -311,13 +381,15 @@ plot_1 <- model_data %>%
   ggplot(aes(x = values, y = fct_reorder(batsman, values))) +
   stat_halfeye(aes(fill = stat(cut_cdf_qi(cdf, .width = c(0.95, 1)))),
                show.legend = FALSE) +
+  scale_fill_calc() +
   scale_x_continuous(labels = scales::number_format(accuracy = 1),
                      n.breaks = 10) +
   labs(title = "Expected Runs as Opener for India's Top Batsmen",
        subtitle = "KL Rahul has the highest projected runs, though all four are within a close range of values",
        x = "Average Runs Scored Per Innings (assuming 36 balls faced)",
        y = "Name of Batsman",
-       caption = "Source: ESPNCricinfo")
+       caption = "Source: ESPNCricinfo",
+       fill = "Interval")
 
 # We can also construct a plot to visualize the best opening combinations
 
@@ -338,8 +410,7 @@ plot_2 <- model_data %>%
                      n.breaks = 10) +
   labs(title = "Expected Runs per Opening Combination for India",
        subtitle = "Sharma + KL Rahul is the settled combination, but Kohli + Sharma is a close second",
-       x = "Runs Scored per Innings
-       (assuming 36 balls faced by each batsman)",
+       x = "Runs Scored per Innings (assuming 36 balls faced by each batsman)",
        y = "Name of Batsmen",
        caption = "Source: ESPNCricinfo")
 
