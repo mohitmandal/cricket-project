@@ -6,7 +6,7 @@ ui <- navbarPage(
     "The Future of Cricket",
     tabPanel("Background",
              h5("How have Indian cricketers performed in T20 cricket since its inception in the early 2000s?"),
-             p("Twenty-20, or T20, is the newest format of cricket, which was officially sanctioned by the International Council of Cricket (ICC) in 2004, with the first international T20 taking place between the England and New Zealand women's teams."),
+             p("Twenty-20, or T20, is the newest format of cricket, which was officially sanctioned by the International Council of Cricket (ICC) in 2004, with the first international men's T20 taking place between Australia and New Zealand in 2005."),
              p("In a Twenty20 game, two teams have a single innings each, which is restricted to a maximum of 20 overs (or 120 balls). Since its inception, T20 cricket has soared in popularity, as is observable from the chart below, especially with the rise of competitive franchise leagues such as the Indian Premier League. The game is fast-paced and often relies upon batsmen scoring runs at a quick run-rate, as compared to the 50-over (ODI, i.e. One Day International) format."),
              p("In this analysis, I seek to understand the evolution of T20 cricket in the past 15 years through a number of parameters."),
              br(),
