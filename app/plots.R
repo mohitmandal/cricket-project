@@ -3,6 +3,8 @@ library(tidyverse)
 library(ggthemes)
 library(ggdist)
 
+# DATA WRANGLING AND CLEANING
+
 # The library "cricketr" is extremely useful. It makes it easy to scrape data
 # on individual players and teams from the website ESPNCricinfo. Credits to
 # Tinniam V. Ganesh!
@@ -46,6 +48,8 @@ india_test <- getTeamData(teamName = "India",
                      dir = "raw_data",
                      file = "India_test.csv",
                      matchType = "Test")
+
+# DATA ANALYSIS
 
 # I will start by creating a plot with the number of games played by India in
 # each format since 2006. The tibble I just scraped includes information about
@@ -298,6 +302,9 @@ klrahul_SR_plot <- klrahul_pdata %>%
        x = "Innings number",
        y = "Strike Rate",
        caption = "Source: ESPNCricinfo")
+
+
+# FITTING A MODEL
 
 # library(rstanarm)
 
