@@ -89,9 +89,12 @@ india_test$`Start Date` <- as.Date(india_test$`Start Date`, format = "%d %b %Y")
 
 india_test$year <- as.numeric(format(india_test$`Start Date`, "%Y"))
 
+# Counting test matches requires slightly different coding, because a test match
+# has two innings
+
 tests_played <- india_test %>% 
-  select(year) %>%
-  filter(year >= 2006) %>%
+  select(year, Inns) %>%
+  filter(year >= 2006 & (Inns == "1" | Inns == "2")) %>%
   group_by(year) %>% 
   summarise(Tests = n())
 
