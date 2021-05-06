@@ -49,9 +49,9 @@ ui <- navbarPage(
              Harvard  University. 
              You can reach me at mandal@g.harvard.edu."),
              h3("About this Project"),
-             p("I have always avidly followed cricket, and cricket has always been a numbers-obsessed sport. So, it made natural sense that I would combine my love for cricket with my newfound data analysis skills to glean new insights about the sport."),
+             p("I have always followed cricket, and cricket is very much a numbers-obsessed sport. So, it was natural that I would combine my love for cricket with my newfound data analysis skills to glean new insights about the sport."),
              h3("Data sources"),
-             p(tags$a(href="https://stats.espncricinfo.com/ci/engine/stats/index.html", "ESPNCricinfo"), "provided all of the data of this project. Specifically, I am heavily indebted to the cricketr package developed by Tinniam V Ganesh, which made it exceedingly easy to scrape data for players and teams from ESPNCricinfo."),
+             p(tags$a(href="https://stats.espncricinfo.com/ci/engine/stats/index.html", "ESPNCricinfo"), "provided all of the data of this project. Specifically, I am indebted to the 'cricketr' package developed by Tinniam V Ganesh, which made it exceedingly easy to scrape data for players and teams from ESPNCricinfo."),
              p("You can find my Github repository", tags$a(href="https://github.com/mohitmandal/cricket-project", "here."))))
 
 server <- function(input, output) {
