@@ -52,9 +52,9 @@ india_test <- getTeamData(teamName = "India",
 # DATA ANALYSIS
 
 # I will start by creating a plot with the number of games played by India in
-# each format since 2006. The tibble I just scraped includes information about
-# the day each game is played, so it should be easy to wrangle the nunber of
-# games played per year.
+# each format since 2004, which was when T20 cricket was sanctioned. The tibble
+# I just scraped includes information about the day each game is played, so it
+# should be easy to wrangle the nunber of games played per year.
 
 # The as.Date() function ensures that the date column is, in fact, a date. The
 # '%b' is R's way of referring to the abbreviations for month (such as Dec, Jan,
@@ -79,7 +79,7 @@ india_ODI$year <- as.numeric(format(india_ODI$`Start Date`, "%Y"))
 
 ODIs_played <- india_ODI %>% 
   select(year) %>%
-  filter(year >= 2006) %>%
+  filter(year >= 2004) %>%
   group_by(year) %>% 
   summarise(ODIs = n())
 
@@ -94,7 +94,7 @@ india_test$year <- as.numeric(format(india_test$`Start Date`, "%Y"))
 
 tests_played <- india_test %>% 
   select(year, Inns) %>%
-  filter(year >= 2006 & (Inns == "1" | Inns == "2")) %>%
+  filter(year >= 2004 & (Inns == "1" | Inns == "2")) %>%
   group_by(year) %>% 
   summarise(Tests = n())
 
@@ -112,9 +112,9 @@ games_played <- full_join(T20s_played, ODIs_played, by = "year") %>%
 plot_games <- ggplot(data = games_played,
        aes(x = year, y = number, fill = format)) +
   geom_col(position = "dodge") +
-  scale_x_continuous(breaks = seq(2006, 2021, by = 2)) +
-  labs(title = "Games played by India since 2006, by format",
-       subtitle = "ODIs are on the wane, increasingly subsituted with T20s",
+  scale_x_continuous(breaks = seq(2004, 2021, by = 1)) +
+  labs(title = "Games played by India since 2004, by format",
+       subtitle = "ODIs, previously the most popular format, is on the wane, increasingly subsituted with T20s since the past 7 years",
        x = "Year",
        y = "Games played",
        caption = "source: ESPNCricinfo")

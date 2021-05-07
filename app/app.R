@@ -39,7 +39,7 @@ ui <- navbarPage(
                  tabPanel("Strike Rate", plotOutput("SR_plot"))
              )),
     tabPanel("Predicting Future Performance", 
-             h3("What is India's best opening combination?"),
+             h4("What is India's best opening combination?"),
              p("In 2021 and 2022, there are two T20 World Cups scheduled. Based on their performances to-date, can we evaluate India's best openers? What is India's best opening combination?"),
              p("These models project average runs scored as a function of balls faced and batting position."),
              br(),
@@ -54,13 +54,13 @@ ui <- navbarPage(
              br(),
     ),
     tabPanel("About",
-             h3("About Me"),
+             h4("About Me"),
              p("My name is Mohit Mandal, I am a PhD student in the Department of Anthropology at 
              Harvard  University."),
              p("You can reach me at mandal@g.harvard.edu."),
-             h3("About this Project"),
+             h4("About this Project"),
              p("I have always followed cricket, and cricket is very much a numbers-obsessed sport. So, it was natural that I would combine my love for cricket with my newfound data analysis skills to glean new insights about the sport."),
-             h3("Data sources"),
+             h4("Data sources"),
              p(tags$a(href="https://stats.espncricinfo.com/ci/engine/stats/index.html", "ESPNCricinfo"), "provided all of the data on players and teams. Specifically, I am indebted to the", tags$a(href="https://cran.r-project.org/web/packages/cricketr/index.html", "cricketr"), "package developed by Tinniam V Ganesh, which made it exceedingly easy to scrape this data from ESPNCricinfo."),
              p("You can find my Github repository", tags$a(href="https://github.com/mohitmandal/cricket-project", "here."))))
 
