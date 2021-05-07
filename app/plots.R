@@ -9,6 +9,9 @@ library(ggdist)
 # on individual players and teams from the website ESPNCricinfo. Credits to
 # Tinniam V. Ganesh!
 
+# I don't need to save the data to a CSV file as such, I can just save them to
+# tibbles, but the 'file' part of the function is required.
+
 kohli <- getPlayerDataTT(profile = 253802, 
                          dir = "raw_data",
                          file = "kohli_T20.csv",
@@ -22,12 +25,12 @@ sharma <- getPlayerDataTT(profile = 34102,
 
 dhawan <- getPlayerDataTT(profile = 28235, 
                           dir = "raw_data",
-                          file = "sharma_T20.csv",
+                          file = "dhawan_T20.csv",
                           type = "batting")
 
 klrahul <- getPlayerDataTT(profile = 422108, 
                            dir = "raw_data",
-                           file = "sharma_T20.csv",
+                           file = "klrahul_T20.csv",
                            type = "batting")
 
 # I want to create a plot to orient the reader to the different formats of cricket
