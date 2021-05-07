@@ -39,17 +39,14 @@ klrahul <- getPlayerDataTT(profile = 422108,
 
 india_T20 <- getTeamData(teamName = "India",
                      dir = "raw_data",
-                     file = "India_T20.csv",
                      matchType = "T20")
 
 india_ODI <- getTeamData(teamName = "India",
                      dir = "raw_data",
-                     file = "India_ODI.csv",
                      matchType = "ODI")
 
 india_test <- getTeamData(teamName = "India",
                      dir = "raw_data",
-                     file = "India_test.csv",
                      matchType = "Test")
 
 # DATA ANALYSIS
