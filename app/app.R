@@ -19,7 +19,7 @@ ui <- navbarPage(
     tabPanel("Batsman analysis",
              h4("How have top Indian players fared since their debut?"),
              p("In this analysis, I examine runs scored by a batsman over the course of their entire career and their strike rate. Strike rate (SR) is calculated as runs scored per 100 balls faced, and provides a measure of the pace at which a batsman scores runs."),
-             p("The increasing tendency of strike-rate indicates that each batsman has become more aggressive over the course of their careers, with the notable exception of KL Rahul, who started out with a high strike-rate (around 140) and has maintained it since."),
+             p("The increasing tendency of strike-rate indicates that each batsman has become more aggressive over the course of their careers, with the notable exception of KL Rahul, who started out with a high strike-rate (around 150) and has maintained it since."),
              br(),
              selectInput("batsman",
                          "Select a batsman",
