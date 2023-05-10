@@ -17,7 +17,6 @@ kohli <- getPlayerDataTT(profile = 253802,
                          file = "kohli_T20.csv",
                          type = "batting")
 
-
 sharma <- getPlayerDataTT(profile = 34102, 
                           dir = "raw_data",
                           file = "sharma_T20.csv",
@@ -112,7 +111,7 @@ games_played <- full_join(T20s_played, ODIs_played, by = "year") %>%
 plot_games <- ggplot(data = games_played,
        aes(x = year, y = number, fill = format)) +
   geom_col(position = "dodge") +
-  scale_x_continuous(breaks = seq(2004, 2022, by = 1)) +
+  scale_x_continuous(breaks = seq(2004, 2023, by = 1)) +
   labs(title = "Games played by India since 2004, by format",
        subtitle = "ODIs, previously the most popular format, is on the wane, increasingly subsituted with T20s since the past 7 years",
        x = "Year",
