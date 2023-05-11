@@ -4,11 +4,6 @@ library(ggthemes)
 library(ggdist)
 
 # DATA WRANGLING AND CLEANING
-
-# The library "cricketr" is extremely useful. It makes it easy to scrape data
-# on individual players and teams from the website ESPNCricinfo. Credits to
-# Tinniam V. Ganesh!
-
 # I don't need to save the data to a CSV file as such, I can just save them to
 # tibbles, but the 'file' part of the function is required.
 
@@ -51,7 +46,7 @@ india_test <- getTeamData(teamName = "India",
 # DATA ANALYSIS
 
 # I will start by creating a plot with the number of games played by India in
-# each format since 2004, which was when T20 cricket was sanctioned. The tibble
+# each format since 2005, which was when T20 cricket was sanctioned. The tibble
 # I just scraped includes information about the day each game is played, so it
 # should be easy to wrangle the nunber of games played per year.
 
@@ -78,7 +73,7 @@ india_ODI$year <- as.numeric(format(india_ODI$`Start Date`, "%Y"))
 
 ODIs_played <- india_ODI %>% 
   select(year) %>%
-  filter(year >= 2004) %>%
+  filter(year >= 2005) %>%
   group_by(year) %>% 
   summarise(ODIs = n())
 
@@ -93,7 +88,7 @@ india_test$year <- as.numeric(format(india_test$`Start Date`, "%Y"))
 
 tests_played <- india_test %>% 
   select(year, Inns) %>%
-  filter(year >= 2004 & (Inns == "1" | Inns == "2")) %>%
+  filter(year >= 2005 & (Inns == "1" | Inns == "2")) %>%
   group_by(year) %>% 
   summarise(Tests = n())
 
@@ -111,8 +106,8 @@ games_played <- full_join(T20s_played, ODIs_played, by = "year") %>%
 plot_games <- ggplot(data = games_played,
        aes(x = year, y = number, fill = format)) +
   geom_col(position = "dodge") +
-  scale_x_continuous(breaks = seq(2004, 2023, by = 1)) +
-  labs(title = "Games played by India since 2004, by format",
+  scale_x_continuous(breaks = seq(2005, 2023, by = 1)) +
+  labs(title = "Games played by India since 2005, by format",
        subtitle = "ODIs, previously the most popular format, is on the wane, increasingly subsituted with T20s since the past 7 years",
        x = "Year",
        y = "Games played",
